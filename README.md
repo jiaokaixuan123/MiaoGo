@@ -101,21 +101,41 @@ mvn spring-boot:run
 
 ---
 
-## 目录结构（规划中）
+## 架构总览
+
+完整的目标架构（Phase 5/6 完成态）见 [doc/技术架构.md](doc/技术架构.md)，包含接入层、注册配置中心、服务治理、应用服务、中间件、可观测与 CI/CD 全景。
+
+## 目录结构（模块化单体 / Modular Monolith）
+
+采用**按领域分模块**的包结构（而非传统的 controller/service/mapper 技术分层）：顶层按业务域划分，域内部保留轻量分层。这样 Phase 5 拆微服务时，几乎是把一个顶层包整体剪下来即可，依赖边界提前理清。
 
 ```
 MiaoGo/
-├── doc/                    # 方案文档、技术笔记、压测报告
-│   └── 秒购-项目方案.md
+├── doc/                    # 方案文档、技术笔记、压测报告、架构图
+│   ├── 秒购-项目方案.md
+│   └── 技术架构.md
 ├── src/main/java/com/miaogo/
-│   ├── controller/         # 接口层
-│   ├── service/            # 业务逻辑
-│   ├── mapper/             # MyBatis-Plus Mapper
-│   ├── domain/             # entity / dto / vo
-│   ├── common/             # 统一返回、异常、枚举
-│   ├── config/             # 配置（线程池等）
-│   └── order/              # 状态机、责任链
+│   ├── common/             # 跨模块共享：Result、异常、基础枚举、工具
+│   ├── config/             # 全局配置：线程池、MyBatis-Plus、Web
+│   ├── user/               # 用户域
+│   │   ├── controller/
+│   │   ├── service/        # (含 impl)
+│   │   ├── mapper/
+│   │   └── domain/         # entity / dto / vo
+│   ├── product/            # 商品域（同上分层）
+│   ├── stock/              # 库存域（秒杀核心）
+│   ├── order/              # 订单域
+│   │   ├── controller/
+│   │   ├── service/
+│   │   ├── mapper/
+│   │   ├── domain/
+│   │   ├── statemachine/   # 状态模式（订单状态机）
+│   │   └── chain/          # 责任链（下单前置校验）
+│   ├── payment/            # 支付域
+│   └── marketing/          # 营销域（优惠券等）
 └── src/main/resources/
     ├── application.yml
     └── db/schema.sql
 ```
+
+> 提示：Phase 0 域内保持轻量分层（DDD-lite）即可；待 `order` / `payment` 业务变复杂后，再局部演进到完整 DDD 分层（interfaces / application / domain / infrastructure）。
