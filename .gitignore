@@ -1,0 +1,63 @@
+# ---- Maven ----
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# ---- Gradle (以防后续切换) ----
+.gradle/
+build/
+
+# ---- Java / 编译产物 ----
+*.class
+*.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+
+# ---- Spring Boot 本地配置（含密钥，不进库）----
+application-local.yml
+application-local.yaml
+application-local.properties
+src/main/resources/application-local.*
+
+# ---- IDE: IntelliJ IDEA ----
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# ---- IDE: Eclipse / VSCode ----
+.project
+.classpath
+.settings/
+.vscode/
+bin/
+
+# ---- AI 编码工具本地配置 ----
+.claude/
+.codex/
+.kiro/
+.cursor/
+.aider*
+.windsurf/
+.continue/
+
+# ---- 操作系统 ----
+.DS_Store
+Thumbs.db
+
+# ---- 其他 ----
+*.tmp
+*.bak
+logs/
